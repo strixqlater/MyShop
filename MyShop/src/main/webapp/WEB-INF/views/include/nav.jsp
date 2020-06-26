@@ -12,6 +12,13 @@
 	</li>
 </c:if>
 <c:if test="${member != null}">
+	
+	<c:if test="${member.userAuth == 1}">
+		<li>
+			<a href="/admin/index">관리모드</a>
+		</li>
+	</c:if>
+	
 	<li>
 		${member.userName}님! 환영합니다!
 	</li>

@@ -23,6 +23,13 @@
 	
 	<context:component-scan base-package="kr.daoko.controller" />
 	
-	
+	<beans:bean id="AdminInterceptor" class="kr.daoko.interceptor.AdminInterceptor" />
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/**" />
+			<beans:ref bean="AdminInterceptor" />
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>
