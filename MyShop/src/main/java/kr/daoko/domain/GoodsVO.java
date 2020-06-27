@@ -9,6 +9,7 @@ public class GoodsVO {
 	private int gdsPrice;
 	private String gdsDesc;
 	private String gdsImg;
+	private String gdsThumbImg;
 	private Date gdsDate;
 	
 	public String getGdsCode() {
@@ -46,6 +47,12 @@ public class GoodsVO {
 	}
 	public void setGdsImg(String gdsImg) {
 		this.gdsImg = gdsImg;
+	}
+	public String getGdsThumbImg() {
+		return gdsThumbImg;
+	}
+	public void setGdsThumbImg(String gdsThumbImg) {
+		this.gdsThumbImg = gdsThumbImg;
 	}
 	public Date getGdsDate() {
 		return gdsDate;

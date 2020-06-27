@@ -33,4 +33,5 @@
 	<context:component-scan base-package="kr.daoko.domain" />
 	<context:component-scan base-package="kr.daoko.persistence" />
 	<context:component-scan base-package="kr.daoko.service" />
+	<context:component-scan base-package="kr.daoko.utils" />
 </beans>

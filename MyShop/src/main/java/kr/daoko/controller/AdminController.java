@@ -1,8 +1,11 @@
 package kr.daoko.controller;
 
+import java.io.File;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +14,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.daoko.domain.CategoryVO;
 import kr.daoko.domain.GoodsVO;
 import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.service.AdminService;
+import kr.daoko.utils.UploadFileUtils;
 import net.sf.json.JSONArray;
 
 @Controller
@@ -25,6 +30,9 @@ public class AdminController {
 
 	@Inject
 	AdminService adminService;
+	
+	@Resource(name = "uploadPath")
+	private String uploadPath;
 	
 	// 관리 모드
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -44,8 +52,23 @@ public class AdminController {
 	
 	// 상품 등록 post
 	@RequestMapping(value = "/goods/register", method = RequestMethod.POST)
-	public String postGoodsRegister(GoodsVO vo) throws Exception {
+	public String postGoodsRegister(GoodsVO vo, MultipartFile file) throws Exception {
 		logger.info("post goods register");
+		
+		String imgUploadPath = uploadPath + File.separator + "imgUpload";
+		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);
+		String fileName = null;
+
+		if(file.getOriginalFilename() != null && file.getOriginalFilename() != "") {
+			fileName =  UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
+		}
+		
+		else {
+			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
+		}
+
+		vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
+		vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
 
 		adminService.register(vo);
 		
@@ -85,9 +108,27 @@ public class AdminController {
 	
 	// 상품 수정 post
 	@RequestMapping(value = "/goods/modify", method = RequestMethod.POST)
-	public String postGoodsModify(GoodsVO vo) throws Exception {
+	public String postGoodsModify(GoodsVO vo, MultipartFile file, HttpServletRequest req) throws Exception {
 		logger.info("post goods modify");
 
+		if(file.getOriginalFilename() != null && file.getOriginalFilename().equals("")) {
+			new File(uploadPath + req.getParameter("gdsImg")).delete();
+			new File(uploadPath + req.getParameter("gdsThumbImg")).delete();
+			  
+			String imgUploadPath = uploadPath + File.separator + "imgUpload";
+			String ymdPath = UploadFileUtils.calcPath(imgUploadPath);
+			String fileName = UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath);
+			  
+			vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
+			vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
+			  
+		}
+		
+		else {
+			vo.setGdsImg(req.getParameter("gdsImg"));
+			vo.setGdsThumbImg(req.getParameter("gdsThumbImg"));
+		}
+		
 		adminService.goodsModify(vo);
 		
 		return "redirect:/admin/goods/list/";

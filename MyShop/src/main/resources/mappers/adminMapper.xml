@@ -12,8 +12,8 @@
 	
 	<!-- 상품 등록 -->
 	<insert id="register">
-		insert into tbl_goods(gdsCode, gdsName, cateCode, gdsPrice, gdsDesc)
-		values(#{gdsCode}, #{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsDesc})
+		insert into tbl_goods(gdsCode, gdsName, cateCode, gdsPrice, gdsDesc, gdsImg, gdsThumbImg)
+		values(#{gdsCode}, #{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsDesc}, #{gdsImg}, #{gdsThumbImg})
 	</insert>
 	
 	<!-- 상품 목록 -->
@@ -25,7 +25,7 @@
 	
 	<!-- 상품 조회 -->
 	<select id="goodsView" resultType="kr.daoko.domain.GoodsViewVO">
-		select g.gdsCode, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsDesc, gdsImg, gdsDate
+		select g.gdsCode, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsDesc, gdsImg, gdsDate, gdsThumbImg
 		from tbl_goods g
 		inner join goods_category c
 		on g.cateCode = c.cateCode
@@ -39,7 +39,9 @@
 			gdsName = #{gdsName},
 			cateCode = #{cateCode},
 			gdsPrice = #{gdsPrice},
-			gdsDesc = #{gdsDesc}
+			gdsDesc = #{gdsDesc},
+			gdsImg = #{gdsImg},
+			gdsThumbImg = #{gdsThumbImg}
 		where gdsCode = #{gdsCode}
 	</update>
 	
