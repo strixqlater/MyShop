@@ -15,4 +15,18 @@
 		insert into tbl_goods(gdsCode, gdsName, cateCode, gdsPrice, gdsDesc)
 		values(#{gdsCode}, #{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsDesc})
 	</insert>
+	
+	<!-- 상품 목록 -->
+	<select id="goodslist" resultType="kr.daoko.domain.GoodsVO">
+		select gdsCode, gdsName, cateCode, gdsPrice, gdsDesc, gdsImg, gdsDate
+		from tbl_goods
+		order by gdsDate desc
+	</select>
+	
+	<!-- 상품 조회 -->
+	<select id="goodsView" resultType="kr.daoko.domain.GoodsVO">
+		select gdsCode, gdsName, cateCode, gdsPrice, gdsDesc, gdsImg, gdsDate
+		from tbl_goods
+		where gdsCode = #{gdsCode}
+	</select>
 </mapper>
