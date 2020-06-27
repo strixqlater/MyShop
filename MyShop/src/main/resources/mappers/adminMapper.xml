@@ -17,9 +17,11 @@
 	</insert>
 	
 	<!-- 상품 목록 -->
-	<select id="goodslist" resultType="kr.daoko.domain.GoodsVO">
-		select gdsCode, gdsName, cateCode, gdsPrice, gdsDesc, gdsImg, gdsDate
-		from tbl_goods
+	<select id="goodslist" resultType="kr.daoko.domain.GoodsViewVO">
+		select g.gdsCode, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsDesc, gdsImg, gdsDate, gdsThumbImg
+		from tbl_goods g
+		inner join goods_category c
+		on g.cateCode = c.cateCode
 		order by gdsDate desc
 	</select>
 	

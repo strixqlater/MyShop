@@ -67,14 +67,19 @@ public class AdminController {
 
 		if(file.getOriginalFilename() != null && file.getOriginalFilename() != "") {
 			fileName =  UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
+			
+			vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
+			vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
 		}
 		
 		else {
-			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
+			fileName = File.separator + "images" + File.separator + "none.gif";
+			
+			vo.setGdsImg(fileName);
+			vo.setGdsThumbImg(fileName);
 		}
 
-		vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
-		vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
+		
 
 		adminService.register(vo);
 		
@@ -86,7 +91,7 @@ public class AdminController {
 	public void getGoodsList(Model model) throws Exception {
 		logger.info("get goods list");
 		
-		List<GoodsVO> list = adminService.goodslist();
+		List<GoodsViewVO> list = adminService.goodslist();
 		model.addAttribute("list", list);
 	}
 	

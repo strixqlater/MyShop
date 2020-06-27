@@ -38,6 +38,9 @@
 	<!-- ckeditor file upload path -->
 	<resources mapping="/ckUpload/**" location="/resources/ckUpload/" />
 	
+	<!-- replace image path -->
+	<resources mapping="/images/**" location="/resources/images/" />
+	
 	<beans:bean id="AdminInterceptor" class="kr.daoko.interceptor.AdminInterceptor" />
 
 	<interceptors>
