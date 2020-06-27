@@ -9,4 +9,10 @@
 		from goods_category
 		start with cateCodeRef is null connect by prior cateCode = cateCodeRef
 	</select>
+	
+	<!-- 상품 등록 -->
+	<insert id="register">
+		insert into tbl_goods(gdsCode, gdsName, cateCode, gdsPrice, gdsDesc)
+		values(#{gdsCode}, #{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsDesc})
+	</insert>
 </mapper>
