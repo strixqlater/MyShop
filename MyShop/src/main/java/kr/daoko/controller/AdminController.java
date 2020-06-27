@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.daoko.domain.CategoryVO;
 import kr.daoko.domain.GoodsVO;
+import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.service.AdminService;
 import net.sf.json.JSONArray;
 
@@ -48,7 +49,7 @@ public class AdminController {
 
 		adminService.register(vo);
 		
-		return "redirect:/admin/index";
+		return "redirect:/admin/goods/list";
 	}
 	
 	// 상품 목록
@@ -65,7 +66,40 @@ public class AdminController {
 	public void getGoodsView(@RequestParam("n") String gdsCode, Model model) throws Exception {
 		logger.info("get goods view");
 		
-		GoodsVO goods = adminService.goodsView(gdsCode);
+		GoodsViewVO goods = adminService.goodsView(gdsCode);
 		model.addAttribute("goods", goods);
+	}
+	
+	// 상품 수정 get
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.GET)
+	public void getGoodsModify(@RequestParam("n") String gdsCode, Model model) throws Exception {
+		logger.info("get goods modify");
+
+		GoodsViewVO goods = adminService.goodsView(gdsCode);
+		model.addAttribute("goods", goods);
+		
+		List<CategoryVO> category = null;
+		category = adminService.category();
+		model.addAttribute("category", JSONArray.fromObject(category));
+	}
+	
+	// 상품 수정 post
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.POST)
+	public String postGoodsModify(GoodsVO vo) throws Exception {
+		logger.info("post goods modify");
+
+		adminService.goodsModify(vo);
+		
+		return "redirect:/admin/goods/list/";
+	}
+	
+	// 상품 삭제
+	@RequestMapping(value = "/goods/delete", method = RequestMethod.POST)
+	public String postGoodsDelete(@RequestParam("n") String gdsCode) throws Exception {
+		logger.info("post goods delete");
+
+		adminService.goodsDelete(gdsCode);
+		
+		return "redirect:/admin/goods/list";
 	}
 }

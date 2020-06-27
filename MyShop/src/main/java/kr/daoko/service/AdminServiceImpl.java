@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.daoko.domain.CategoryVO;
 import kr.daoko.domain.GoodsVO;
+import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.persistence.AdminDAO;
 
 @Service
@@ -36,7 +37,19 @@ public class AdminServiceImpl implements AdminService {
 
 	// 상품 조회
 	@Override
-	public GoodsVO goodsView(String gdsCode) throws Exception {
+	public GoodsViewVO goodsView(String gdsCode) throws Exception {
 		return dao.goodsView(gdsCode);
+	}
+
+	// 상품 수정
+	@Override
+	public void goodsModify(GoodsVO vo) throws Exception {
+		dao.goodsModify(vo);
+	}
+
+	// 상품 삭제
+	@Override
+	public void goodsDelete(String gdsCode) throws Exception {
+			dao.goodsDelete(gdsCode);
 	}
 }

@@ -24,9 +24,29 @@
 	</select>
 	
 	<!-- 상품 조회 -->
-	<select id="goodsView" resultType="kr.daoko.domain.GoodsVO">
-		select gdsCode, gdsName, cateCode, gdsPrice, gdsDesc, gdsImg, gdsDate
+	<select id="goodsView" resultType="kr.daoko.domain.GoodsViewVO">
+		select g.gdsCode, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsDesc, gdsImg, gdsDate
+		from tbl_goods g
+		inner join goods_category c
+		on g.cateCode = c.cateCode
+		where g.gdsCode = #{gdsCode}
+	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="goodsModify">
+		update tbl_goods
+		set
+			gdsName = #{gdsName},
+			cateCode = #{cateCode},
+			gdsPrice = #{gdsPrice},
+			gdsDesc = #{gdsDesc}
+		where gdsCode = #{gdsCode}
+	</update>
+	
+	<!-- 상품 삭제 -->
+	<delete id="goodsDelete">
+		delete 
 		from tbl_goods
 		where gdsCode = #{gdsCode}
-	</select>
+	</delete>
 </mapper>

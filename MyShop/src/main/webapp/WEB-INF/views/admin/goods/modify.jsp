@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,60 +68,48 @@
 			<%@ include file="../include/aside.jsp" %>
 		</aside>
 		<div id="container_box">
-			<h2>상품 등록</h2>
+			<h2>상품 수정</h2>
 			
 			<form role="form" method="post" autocomplete="off">
-			
-				<input type="hidden" name="n" value="${goods.gdsCode}" />
-			
 				<label>1차 분류</label>
-				<span class="category1"></span>
+				<select class="category1">
+					<option value="">전체</option>
+				</select>
 				
 				<label>2차 분류</label>
-				<span class="category2">${goods.cateCode}</span>
+				<select class="category2" name="cateCode">
+					<option value="">전체</option>
+				</select>
 				
 				<div class="inputArea">
 					<label for="gdsCode">상품코드</label>
-					<span>${goods.gdsCode}</span>
+					<input type="text" id="gdsCode" name="gdsCode" value="${goods.gdsCode}" readonly="readonly" />
 				</div>
 				
 				<div class="inputArea">
 					<label for="gdsName">상품명</label>
-					<span>${goods.gdsName}</span>
+					<input type="text" id="gdsName" name="gdsName" value="${goods.gdsName}" />
 				</div>
 				
 				<div class="inputArea">
 					<label for="gdsPrice">가격</label>
-					<span>
-						<fmt:formatNumber value="${goods.gdsPrice}" pattern="###,###,###" />
-					</span>
+					<input type="text" id="gdsPrice" name="gdsPrice" value="${goods.gdsPrice}" />
 				</div>
 				
 				<div class="inputArea">
 					<label for="gdsDesc">소개</label>
-					<span>${goods.gdsDesc}</span>
+					<textarea rows="5" cols="50" id="gdsDesc" name="gdsDesc">
+						${goods.gdsDesc}
+					</textarea>
 				</div>
 				
 				<div class="inputArea">
-					<button type="button" id="modify_Btn" class="btn btn-warning">수정</button>
-					<button type="button" id="delete_Btn" class="btn btn-danger">삭제</button>
+					<button type="submit" id="update_Btn" class="btn btn-primary">완료</button>
+					<button type="button" id="back_Btn" class="btn btn-warning">취소</button>
 					
 					<script>
-						var formObj = $("form[role='form']");
-						
-						$("#modify_Btn").click(function() {
-							formObj.attr("action", "/admin/goods/modify");
-							formObj.attr("method", "get");
-							formObj.submit();
-						});
-						
-						$("#delete_Btn").click(function() {
-							var conf = confirm("정말로 삭제하시겠습니까?");
-							
-							if(conf) {
-								formObj.attr("action", "/admin/goods/delete");
-								formObj.submit();
-							}
+						$("#back_Btn").click(function() {
+							history.back();
 						});
 					</script>
 				</div>
@@ -136,5 +123,74 @@
 		</div>
 	</footer>
 </div>
+
+<script>
+var jsonData = JSON.parse('${category}');
+console.log(jsonData);
+
+var cate1Arr = new Array();
+var cate1Obj = new Object();
+
+for(var i=0; i<jsonData.length; i++) {
+	if(jsonData[i].level == "1") {
+		cate1Obj = new Object();
+		cate1Obj.cateCode = jsonData[i].cateCode;
+		cate1Obj.cateName = jsonData[i].cateName;
+		cate1Arr.push(cate1Obj);
+	}
+}
+
+var cate1Select = $("select.category1");
+
+for(var i=0; i<cate1Arr.length; i++) {
+	cate1Select.append("<option value='" + cate1Arr[i].cateCode + "'>" + cate1Arr[i].cateName + "</option>");
+}
+
+$(document).on("change", "select.category1", function() {
+	var cate2Arr = new Array();
+	var cate2Obj = new Object();
+	
+	for(var i=0; i<jsonData.length; i++) {
+		if(jsonData[i].level == "2") {
+			cate2Obj = new Object();
+			cate2Obj.cateCode = jsonData[i].cateCode;
+			cate2Obj.cateName = jsonData[i].cateName;
+			cate2Obj.cateCodeRef = jsonData[i].cateCodeRef;
+			
+			cate2Arr.push(cate2Obj);
+		}
+	}
+	
+	var cate2Select = $("select.category2");
+	cate2Select.children().remove();
+	
+	$("option:selected", this).each(function() {
+		var selectVal = $(this).val();
+		cate2Select.append("<option value='" + selectVal + "'>전체</option>");
+		
+		for(var i=0; i<cate2Arr.length; i++) {
+			if(selectVal == cate2Arr[i].cateCodeRef) {
+				cate2Select.append("<option value='" + cate2Arr[i].cateCode + "'>" + cate2Arr[i].cateName + "</option>");
+			}
+		}
+	});
+});
+
+var select_cateCode = '${goods.cateCode}';
+var select_cateCodeRef = '${goods.cateCodeRef}';
+var select_cateName = '${goods.cateName}';
+
+if(select_cateCodeRef != null && select_cateCodeRef != '') {
+	$(".category1").val(select_cateCodeRef);
+	$(".category2").val(select_cateCode);
+	$(".category2").children().remove();
+	$(".category2").append("<option value='" + select_cateCode + "'>" + select_cateName + "</option>");
+}
+
+else {
+	$(".category1").val(select_cateCode);
+	$(".category2").append("<option value='" + select_cateCode + "' selected='selected'>전체</option>");
+}
+</script>
 </body>
 </html>
