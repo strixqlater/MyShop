@@ -34,4 +34,10 @@ public class ShopDAOImpl implements ShopDAO {
 	public List<GoodsViewVO> list(String cateCode) throws Exception {
 		return sql.selectList(namespace + ".list_2", cateCode);
 	}
+
+	// 상품 조회
+	@Override
+	public GoodsViewVO goodsView(String gdsCode) throws Exception {
+		return sql.selectOne(namespace + ".goodsView", gdsCode);
+	}
 }

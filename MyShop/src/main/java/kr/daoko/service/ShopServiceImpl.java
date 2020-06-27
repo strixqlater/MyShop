@@ -29,4 +29,10 @@ public class ShopServiceImpl implements ShopService {
 			return dao.list(cateCode);
 		}
 	}
+
+	// 상품 조회
+	@Override
+	public GoodsViewVO goodsView(String gdsCode) throws Exception {
+		return dao.goodsView(gdsCode);
+	}
 }

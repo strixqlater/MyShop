@@ -21,4 +21,13 @@
 		on g.cateCode = c.cateCode
 		where g.cateCode = #{cateCode}
 	</select>
+	
+	<!-- 상품 조회 -->
+	<select id="goodsView" resultType="kr.daoko.domain.GoodsViewVO">
+		select g.gdsCode, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsDesc, gdsImg, gdsDate, gdsThumbImg
+		from tbl_goods g
+		inner join goods_category c
+		on g.cateCode = c.cateCode
+		where g.gdsCode = #{gdsCode}
+	</select>
 </mapper>
