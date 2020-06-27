@@ -50,6 +50,8 @@
 	
 	.oriImg {width:500px; height:auto; }
 	.thumbImg {}
+	
+	.gdsDesc img { max-width:600px; height:auto; }
 </style>
 
 </head>
@@ -103,7 +105,7 @@
 				
 				<div class="inputArea">
 					<label for="gdsDesc">소개</label>
-					<span>${goods.gdsDesc}</span>
+					<div class="gdsDesc">${goods.gdsDesc}</div>
 				</div>
 				
 				<div class="inputArea">

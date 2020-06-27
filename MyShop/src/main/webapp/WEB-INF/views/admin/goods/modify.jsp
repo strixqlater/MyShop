@@ -14,6 +14,8 @@
 <script src="/resources/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/resources/bootstrap/bootstrap.min.js"></script>
 
+<script src="/resources/ckeditor/ckeditor.js"></script>
+
 <style>
 	body { font-family:'맑은 고딕', verdana; padding:0; margin:0; }
 	ul { padding:0; margin:0; list-style:none;  }
@@ -103,12 +105,27 @@
 					<textarea rows="5" cols="50" id="gdsDesc" name="gdsDesc">
 						${goods.gdsDesc}
 					</textarea>
+					
+					<script>
+						var ckeditor_config = {
+								resize_enable: false,
+								enterMode: CKEDITOR.ENTER_BR,
+								shiftEnterMode: CKEDITOR.ENTER_P,
+								filebrowserUploadUrl: "/admin/goods/ckUpload"
+						};
+						
+						CKEDITOR.replace("gdsDesc", ckeditor_config);
+					</script>
 				</div>
 				
 				<div class="inputArea">
 					<label for="gdsImg">이미지</label>
 					<input type="file" id="gdsImg" name="file" />
-					<div class="select_img"><img src="" /></div>
+					<div class="select_img">
+						<img src="${goods.gdsImg}" />
+						<input type="hidden" name="gdsImg" value="${goods.gdsImg}" />
+						<input type="hidden" name="gdsThumbImg" value="${goods.gdsThumbImg}" />
+					</div>
 					
 					<script>
 						$("#gdsImg").change(function() {

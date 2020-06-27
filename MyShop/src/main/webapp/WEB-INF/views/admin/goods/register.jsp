@@ -14,6 +14,8 @@
 <script src="/resources/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/resources/bootstrap/bootstrap.min.js"></script>
 
+<script src="/resources/ckeditor/ckeditor.js"></script>
+
 <style>
 	body { font-family:'맑은 고딕', verdana; padding:0; margin:0; }
 	ul { padding:0; margin:0; list-style:none;  }
@@ -101,6 +103,17 @@
 				<div class="inputArea">
 					<label for="gdsDesc">소개</label>
 					<textarea rows="5" cols="50" id="gdsDesc" name="gdsDesc"></textarea>
+					
+					<script>
+						var ckeditor_config = {
+								resize_enable: false,
+								enterMode: CKEDITOR.ENTER_BR,
+								shiftEnterMode: CKEDITOR.ENTER_P,
+								filebrowserUploadUrl: "/admin/goods/ckUpload"
+						};
+						
+						CKEDITOR.replace("gdsDesc", ckeditor_config);
+					</script>
 				</div>
 				
 				<div class="inputArea">

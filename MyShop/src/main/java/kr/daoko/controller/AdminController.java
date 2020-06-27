@@ -1,11 +1,17 @@
 package kr.daoko.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +117,7 @@ public class AdminController {
 	public String postGoodsModify(GoodsVO vo, MultipartFile file, HttpServletRequest req) throws Exception {
 		logger.info("post goods modify");
 
-		if(file.getOriginalFilename() != null && file.getOriginalFilename().equals("")) {
+		if(file.getOriginalFilename() != null && file.getOriginalFilename() != "") {
 			new File(uploadPath + req.getParameter("gdsImg")).delete();
 			new File(uploadPath + req.getParameter("gdsThumbImg")).delete();
 			  
@@ -142,5 +148,54 @@ public class AdminController {
 		adminService.goodsDelete(gdsCode);
 		
 		return "redirect:/admin/goods/list";
+	}
+	
+	// ckEditor 업로드
+	@RequestMapping(value = "/goods/ckUpload", method = RequestMethod.POST)
+	public void postCKEditorImgUpload(HttpServletRequest req, HttpServletResponse res, @RequestParam MultipartFile upload) throws Exception {
+		logger.info("post CKEditor img upload");
+		
+		UUID uid = UUID.randomUUID();
+
+		OutputStream out = null;
+		PrintWriter printWriter = null;
+	   
+		res.setCharacterEncoding("utf-8");
+		res.setContentType("text/html;charset=utf-8");
+
+		try {
+			String fileName = upload.getOriginalFilename();
+			byte[] bytes = upload.getBytes();
+
+			String ckUploadPath = uploadPath + File.separator + "ckUpload" + File.separator + uid + "_" + fileName;
+
+			out = new FileOutputStream(new File(ckUploadPath));
+			out.write(bytes);
+			out.flush();
+
+			printWriter = res.getWriter();
+			String fileUrl = "/ckUpload/" + uid + "_" + fileName;
+
+			printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
+			printWriter.flush();
+	  
+		}
+		
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			try {
+				if(out != null) out.close();
+				if(printWriter != null) printWriter.close();
+			}
+			
+			catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	 return; 
 	}
 }

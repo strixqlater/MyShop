@@ -35,6 +35,9 @@
 		<beans:property name="maxUploadSize" value="10485760" />
 	</beans:bean>
 	
+	<!-- ckeditor file upload path -->
+	<resources mapping="/ckUpload/**" location="/resources/ckUpload/" />
+	
 	<beans:bean id="AdminInterceptor" class="kr.daoko.interceptor.AdminInterceptor" />
 
 	<interceptors>
