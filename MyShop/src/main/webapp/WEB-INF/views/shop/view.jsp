@@ -10,6 +10,32 @@
 
 <script src="/resources/jquery/jquery-3.5.1.min.js"></script>
 
+<script>
+	function replyList() {
+		var gdsCode = '${view.gdsCode}';
+		$.getJSON("/shop/view/replyList" + "?n=" + gdsCode, function(data){
+			var str = "";
+	
+			$(data).each(function(){
+		 		console.log(data);
+		  
+				var repDate = new Date(this.repDate);
+				repDate = repDate.toLocaleDateString("ko-US")
+		  
+				str += "<li data-gdsCode='" + this.gdsCode + "'>"
+					+ "<div class='userInfo'>"
+					+ "<span class='userName'>" + this.userName + "</span>"
+					+ "<span class='date'>" + repDate + "</span>"
+					+ "</div>"
+					+ "<div class='replyContent'>" + this.repCon + "</div>"
+					+ "</li>";           
+			});
+		 
+			$("section.replyList ol").html(str);
+		});
+	}
+</script>
+
 <style>
 	body { margin:0; padding:0; font-family:'맑은 고딕', verdana; }
 	a { color:#05f; text-decoration:none; }
@@ -176,14 +202,37 @@
 						<section class="replyForm">
 							<form role="form" method="post" autocomplete="off">
 							
-								<input type="hidden" name="gdsCode" value="${view.gdsCode}">
+								<input type="hidden" id="gdsCode" name="gdsCode" value="${view.gdsCode}">
 							
 								<div class="input_area">
 									<textarea id="repCon" name="repCon"></textarea>
 								</div>
 								
 								<div class="input_area">
-									<button type="submit" id="reply_btn">소감 남기기</button>
+									<button type="button" id="reply_btn">소감 남기기</button>
+									
+									<script>
+										$("#reply_btn").click(function() {
+											var formObj = $(".replyForm form[role='form']");
+											var gdsCode = $("#gdsCode").val();
+											var repCon = $("#repCon").val();
+											
+											var data = {
+													gdsCode: gdsCode,
+													repCon: repCon
+											};
+											
+											$.ajax({
+												url: "/shop/view/registReply",
+												type: "post",
+												data: data,
+												success: function() {
+													replyList();
+													$("#repCon").val("");
+												}
+											});
+										});
+									</script>
 								</div>
 							</form>
 						</section>
@@ -191,16 +240,12 @@
 					
 					<section class="replyList">
 						<ol>
-							<c:forEach items="${reply}" var="reply">
-								<li>
-									<div class="userInfo">
-										<span class="userName">${reply.userName}</span>
-										<span class="date"><fmt:formatDate value="${reply.repDate}" pattern="yyyy-MM-dd" /></span>
-									</div>
-									<div class="replyContent">${reply.repCon}</div>
-								</li>
-							</c:forEach>
 						</ol>
+						
+						<script>
+							replyList();
+						</script>
+						
 					</section>
 				</div>
 			</section>

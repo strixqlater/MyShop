@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.domain.MemberVO;
@@ -45,21 +46,28 @@ public class ShopController {
 		
 		GoodsViewVO view = service.goodsView(gdsCode);
 		model.addAttribute("view", view);
-		
-		List<ReplyListVO> reply = service.replyList(gdsCode);
-		model.addAttribute("reply", reply);
 	}
 	
 	// 상품 조회 내 소감(댓글) 작성
-	@RequestMapping(value = "/view", method = RequestMethod.POST)
-	public String registReply(ReplyVO reply, HttpSession session) throws Exception {
+	@ResponseBody
+	@RequestMapping(value = "/view/registReply", method = RequestMethod.POST)
+	public void registReply(ReplyVO reply, HttpSession session) throws Exception {
 		logger.info("post view regist reply");
 
 		MemberVO member = (MemberVO)session.getAttribute("member");
 		reply.setUserId(member.getUserId());
 		
 		service.registReply(reply);
-		
-		return "redirect:/shop/view?n=" + reply.getGdsCode();
 	}
+	
+	// 상품 소감(댓글) 목록
+	@ResponseBody
+	@RequestMapping(value = "/view/replyList", method = RequestMethod.GET)
+	public List<ReplyListVO> getReplyList(@RequestParam("n") String gdsCode) throws Exception {
+		logger.info("get reply list");
+	   
+		List<ReplyListVO> reply = service.replyList(gdsCode);
+	 
+		return reply;
+	} 
 }
