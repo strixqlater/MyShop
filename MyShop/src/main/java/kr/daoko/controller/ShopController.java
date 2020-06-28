@@ -69,5 +69,46 @@ public class ShopController {
 		List<ReplyListVO> reply = service.replyList(gdsCode);
 	 
 		return reply;
-	} 
+	}
+	
+	// 상품 소감(댓글) 삭제
+	@ResponseBody
+	@RequestMapping(value = "/view/deleteReply", method = RequestMethod.POST)
+	public int getReplyList(ReplyVO reply, HttpSession session) throws Exception {
+		logger.info("post delete reply");
+		
+		int result = 0;
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		String userId = service.idCheck(reply.getRepNum());
+		
+		if(member.getUserId().equals(userId)) {
+			reply.setUserId(member.getUserId());
+			service.deleteReply(reply);
+			
+			result = 1;
+		}
+		
+		return result;
+	}
+	
+	// 상품 소감(댓글) 수정
+	@ResponseBody
+	@RequestMapping(value = "/view/modifyReply", method = RequestMethod.POST)
+	public int modifyReply(ReplyVO reply, HttpSession session) throws Exception {
+		logger.info("modify reply");
+		
+		int result = 0;
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		String userId = service.idCheck(reply.getRepNum());
+		
+		if(member.getUserId().equals(userId)) {
+			reply.setUserId(member.getUserId());
+			service.modifyReply(reply);
+			result = 1;
+		}
+		
+		return result;
+	}
 }

@@ -37,12 +37,32 @@
 		values(#{gdsCode}, #{userId}, tbl_reply_seq.nextval, #{repCon})
 	</insert>
 
-	<!-- 상품 소감(댓글) 리스 -->
+	<!-- 상품 소감(댓글) 리스트 -->
 	<select id="replyList" resultType="kr.daoko.domain.ReplyListVO">
 		select r.gdsCode, r.userId, r.repNum, r.repCon, r.repDate, m.userName
 		from tbl_reply r
 		inner join tbl_member m
 		on r.userId = m.userId
 		where gdsCode = #{gdsCode}
+	</select>
+	
+	<!-- 상품 소감(댓글) 삭제 -->
+	<delete id="deleteReply">
+		delete tbl_reply
+		where repNum = #{repNum} and userId = #{userId}
+	</delete>
+	
+	<!-- 상품 소감(댓글) 수정 -->
+	<update id="modifyReply">
+		update tbl_reply
+		set repCon = #{repCon}
+		where repNum = #{repNum} and userId = #{userId}
+	</update>
+	
+	<!-- 소감(댓글) 작성자 체크 -->
+	<select id="replyUserIdCheck" resultType="String">
+		select userId
+		from tbl_reply
+		where repNum = #{repNum}
 	</select>
 </mapper>
