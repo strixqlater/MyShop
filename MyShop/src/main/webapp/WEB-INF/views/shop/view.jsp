@@ -207,7 +207,40 @@
 							</script>
 						</p>
 						<p class="addToCart">
-							<button type="button">카트에 담기</button>
+							<button type="button" class="addCart_btn">카트에 담기</button>
+							
+							<script>
+								$(".addCart_btn").click(function() {
+									var gdsCode = $("#gdsCode").val();
+									var cartStock = $(".numBox").val();
+									
+									var data = {
+											gdsCode: gdsCode,
+											cartStock: cartStock
+									};
+									
+									$.ajax({
+										url: "/shop/view/addCart",
+										type: "post",
+										data: data,
+										success: function(result) {
+											if(result == 1) {
+												alert("카트 담기 성공");
+												$(".numBox").val("1");
+											}
+											
+											else {
+												alert("로그인 후 이용 가능합니다.");
+												$(".numBox").val("1");
+											}
+										},
+										error: function() {
+											alert("카트 담기 실패");
+										}
+									});
+								});
+							</script>
+							
 						</p>
 					</div>
 					

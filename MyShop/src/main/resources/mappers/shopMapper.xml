@@ -65,4 +65,25 @@
 		from tbl_reply
 		where repNum = #{repNum}
 	</select>
+	
+	<!-- 카트 추가 -->
+	<insert id="addCart">
+		insert into tbl_cart(cartNum, userId, gdsCode, cartStock)
+		values(tbl_cart_seq.nextval, #{userId}, #{gdsCode}, #{cartStock})
+	</insert>
+	
+	<!-- 카트 리스트 -->
+	<select id="cartList" resultType="kr.daoko.domain.CartListVO">
+		select row_number() over(order by c.cartNum desc) as num, c.cartNum, c.userId, c.gdsCode, c.cartStock, c.addDate, g.gdsName, g.gdsPrice, g.gdsThumbImg
+		from tbl_cart c
+		inner join tbl_goods g
+		on c.gdsCode = g.gdsCode
+		where c.userId = #{userId}
+	</select>
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart">
+		delete tbl_cart
+		where cartNum = #{cartNum} and userId = #{userId}
+	</delete>
 </mapper>

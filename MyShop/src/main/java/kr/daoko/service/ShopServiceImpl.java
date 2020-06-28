@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import kr.daoko.domain.CartListVO;
+import kr.daoko.domain.CartVO;
 import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.domain.ReplyListVO;
 import kr.daoko.domain.ReplyVO;
@@ -66,5 +68,23 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public String idCheck(int repNum) throws Exception {
 		return dao.idCheck(repNum);
+	}
+
+	// 카트 추가
+	@Override
+	public void addCart(CartVO cart) throws Exception {
+		dao.addCart(cart);
+	}
+
+	// 카트 리스트
+	@Override
+	public List<CartListVO> cartList(String userId) throws Exception {
+		return dao.cartList(userId);
+	}
+
+	// 카트 삭제
+	@Override
+	public void deleteCart(CartVO cart) throws Exception {
+		dao.deleteCart(cart);
 	}
 }

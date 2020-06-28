@@ -2,6 +2,8 @@ package kr.daoko.service;
 
 import java.util.List;
 
+import kr.daoko.domain.CartListVO;
+import kr.daoko.domain.CartVO;
 import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.domain.ReplyListVO;
 import kr.daoko.domain.ReplyVO;
@@ -27,4 +29,13 @@ public interface ShopService {
 	
 	// 소감(댓글) 작성자 체크
 	public String idCheck(int repNum) throws Exception;
+	
+	// 카트 담기
+	public void addCart(CartVO cart) throws Exception;
+	
+	// 카트 리스트
+	public List<CartListVO> cartList(String userId) throws Exception;
+	
+	// 카트 삭제
+	public void deleteCart(CartVO cart) throws Exception;
 }
