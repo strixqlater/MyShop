@@ -30,4 +30,19 @@
 		on g.cateCode = c.cateCode
 		where g.gdsCode = #{gdsCode}
 	</select>
+	
+	<!-- 상품 소감(댓글) 작성 -->
+	<insert id="registReply">
+		insert into tbl_reply (gdsCode, userId, repNum, repCon)
+		values(#{gdsCode}, #{userId}, tbl_reply_seq.nextval, #{repCon})
+	</insert>
+
+	<!-- 상품 소감(댓글) 리스 -->
+	<select id="replyList" resultType="kr.daoko.domain.ReplyListVO">
+		select r.gdsCode, r.userId, r.repNum, r.repCon, r.repDate, m.userName
+		from tbl_reply r
+		inner join tbl_member m
+		on r.userId = m.userId
+		where gdsCode = #{gdsCode}
+	</select>
 </mapper>
