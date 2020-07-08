@@ -1,5 +1,7 @@
 package kr.daoko.controller;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +20,9 @@ import kr.daoko.domain.CartListVO;
 import kr.daoko.domain.CartVO;
 import kr.daoko.domain.GoodsViewVO;
 import kr.daoko.domain.MemberVO;
+import kr.daoko.domain.OrderDetailVO;
+import kr.daoko.domain.OrderListVO;
+import kr.daoko.domain.OrderVO;
 import kr.daoko.domain.ReplyListVO;
 import kr.daoko.domain.ReplyVO;
 import kr.daoko.service.ShopService;
@@ -170,5 +175,69 @@ public class ShopController {
 		}
 		
 		return result;
+	}
+	
+	// 주문
+	@RequestMapping(value = "/cartList", method = RequestMethod.POST)
+	public String postOrder(HttpSession session, OrderVO order, OrderDetailVO orderDetail) throws Exception {
+		logger.info("order");
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");		
+		String userId = member.getUserId();
+		
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		String ym = year + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
+		String ymd = ym +  new DecimalFormat("00").format(cal.get(Calendar.DATE));
+		String subNum = "";
+		
+		for(int i = 1; i <= 6; i ++) {
+			subNum += (int)(Math.random() * 10);
+		}
+		
+		String orderId = ymd + "_" + subNum;
+		
+		order.setOrderId(orderId);
+		order.setUserId(userId);
+			
+		service.orderInfo(order);
+		
+		orderDetail.setOrderId(orderId);	
+		service.orderInfo_Details(orderDetail);
+		
+		service.cartAllDelete(userId);
+		
+		return "redirect:/shop/orderList";		
+	}
+	
+	// 주문 목록
+	@RequestMapping(value = "/orderList", method = RequestMethod.GET)
+	public void getOrderList(HttpSession session, OrderVO order, Model model) throws Exception {
+		logger.info("get order list");
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		String userId = member.getUserId();
+		
+		order.setUserId(userId);
+		
+		List<OrderVO> orderList = service.orderList(order);
+		
+		model.addAttribute("orderList", orderList);
+	}
+	
+	// 주문 상세 목록
+	@RequestMapping(value = "/orderView", method = RequestMethod.GET)
+	public void getOrderList(HttpSession session, @RequestParam("n") String orderId, OrderVO order, Model model) throws Exception {
+		logger.info("get order view");
+		
+		MemberVO member = (MemberVO)session.getAttribute("member");
+		String userId = member.getUserId();
+		
+		order.setUserId(userId);
+		order.setOrderId(orderId);
+		
+		List<OrderListVO> orderView = service.orderView(order);
+		
+		model.addAttribute("orderView", orderView);
 	}
 }

@@ -49,8 +49,7 @@
 	
 	<!-- 상품 삭제 -->
 	<delete id="goodsDelete">
-		delete 
-		from tbl_goods
+		delete tbl_goods
 		where gdsCode = #{gdsCode}
 	</delete>
 </mapper>

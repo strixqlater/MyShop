@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import kr.daoko.domain.CartListVO;
 import kr.daoko.domain.CartVO;
 import kr.daoko.domain.GoodsViewVO;
+import kr.daoko.domain.OrderDetailVO;
+import kr.daoko.domain.OrderListVO;
+import kr.daoko.domain.OrderVO;
 import kr.daoko.domain.ReplyListVO;
 import kr.daoko.domain.ReplyVO;
 import kr.daoko.persistence.ShopDAO;
@@ -86,5 +89,35 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public void deleteCart(CartVO cart) throws Exception {
 		dao.deleteCart(cart);
+	}
+
+	// 주문 정보
+	@Override
+	public void orderInfo(OrderVO order) throws Exception {
+		dao.orderInfo(order);
+	}
+
+	// 주문 상세 정보
+	@Override
+	public void orderInfo_Details(OrderDetailVO orderDetail) throws Exception {
+		dao.orderInfo_Details(orderDetail);
+	}
+
+	// 카트 비우
+	@Override
+	public void cartAllDelete(String userId) throws Exception {
+		dao.cartAllDelete(userId);
+	}
+
+	// 주문 목록
+	@Override
+	public List<OrderVO> orderList(OrderVO order) throws Exception {
+		return dao.orderList(order);
+	}
+
+	// 특정 주문 목록
+	@Override
+	public List<OrderListVO> orderView(OrderVO order) throws Exception {
+		return dao.orderView(order);
 	}
 }

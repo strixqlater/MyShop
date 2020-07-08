@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 import kr.daoko.domain.CartListVO;
 import kr.daoko.domain.CartVO;
 import kr.daoko.domain.GoodsViewVO;
+import kr.daoko.domain.OrderDetailVO;
+import kr.daoko.domain.OrderListVO;
+import kr.daoko.domain.OrderVO;
 import kr.daoko.domain.ReplyListVO;
 import kr.daoko.domain.ReplyVO;
 
@@ -91,5 +94,35 @@ public class ShopDAOImpl implements ShopDAO {
 	@Override
 	public void deleteCart(CartVO cart) throws Exception {
 		sql.delete(namespace + ".deleteCart", cart);
+	}
+
+	// 주문 정보
+	@Override
+	public void orderInfo(OrderVO order) throws Exception {
+		sql.insert(namespace + ".orderInfo", order);
+	}
+
+	// 주문 상세 정보
+	@Override
+	public void orderInfo_Details(OrderDetailVO orderDetail) throws Exception {
+		sql.insert(namespace + ".orderInfo_Details", orderDetail);
+	}
+
+	// 카트 비우기
+	@Override
+	public void cartAllDelete(String userId) throws Exception {
+		sql.delete(namespace + ".cartAllDelete", userId);
+	}
+
+	// 주문 목록
+	@Override
+	public List<OrderVO> orderList(OrderVO order) throws Exception {
+		return sql.selectList(namespace + ".orderList", order);
+	}
+
+	// 특정 주문 목록
+	@Override
+	public List<OrderListVO> orderView(OrderVO order) throws Exception {
+		return sql.selectList(namespace + ".orderView", order);
 	}
 }
