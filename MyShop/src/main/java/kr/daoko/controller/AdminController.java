@@ -25,6 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.daoko.domain.CategoryVO;
 import kr.daoko.domain.GoodsVO;
 import kr.daoko.domain.GoodsViewVO;
+import kr.daoko.domain.OrderListVO;
+import kr.daoko.domain.OrderVO;
+import kr.daoko.domain.ReplyListVO;
+import kr.daoko.domain.ReplyVO;
 import kr.daoko.service.AdminService;
 import kr.daoko.utils.UploadFileUtils;
 import net.sf.json.JSONArray;
@@ -202,5 +206,43 @@ public class AdminController {
 		}
 
 	 return; 
+	}
+	
+	// 주문 목록
+	@RequestMapping(value = "/shop/orderList", method = RequestMethod.GET)
+	public void getOrderList(Model model) throws Exception {
+		logger.info("get order list");
+		
+		List<OrderVO> orderList = adminService.orderList();
+		model.addAttribute("orderList", orderList);
+	}
+	
+	// 주문 상세 목록
+	@RequestMapping(value = "/shop/orderView", method = RequestMethod.GET)
+	public void getOrderList(@RequestParam("n") String orderId, OrderVO order, Model model) throws Exception {
+		logger.info("get order view");
+		
+		order.setOrderId(orderId);
+		List<OrderListVO> orderView = adminService.orderView(order);
+		model.addAttribute("orderView", orderView);
+	}
+	
+	// 모든 소감(댓글)
+	@RequestMapping(value = "/shop/allReply", method = RequestMethod.GET)
+	public void getAllReply(Model model) throws Exception {
+		logger.info("get all reply");
+		
+		List<ReplyListVO> reply = adminService.allReply();
+		model.addAttribute("reply", reply);
+	}
+	
+	// 소감(댓글) 삭제
+	@RequestMapping(value = "/shop/allReply", method = RequestMethod.POST)
+	public String postAllReply(ReplyVO reply) throws Exception {
+		logger.info("post all reply");
+		
+		adminService.deleteReply(reply.getRepNum());
+		
+		return "redirect:/admin/shop/allReply";
 	}
 }

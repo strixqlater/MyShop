@@ -8,6 +8,7 @@ public class ReplyListVO {
 	private String repCon;
 	private Date repDate;
 	private String userName;
+	private String userId;
 	
 	public String getGdsCode() {
 		return gdsCode;
@@ -38,5 +39,11 @@ public class ReplyListVO {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

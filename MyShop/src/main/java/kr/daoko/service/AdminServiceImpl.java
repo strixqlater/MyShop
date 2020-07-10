@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import kr.daoko.domain.CategoryVO;
 import kr.daoko.domain.GoodsVO;
 import kr.daoko.domain.GoodsViewVO;
+import kr.daoko.domain.OrderListVO;
+import kr.daoko.domain.OrderVO;
+import kr.daoko.domain.ReplyListVO;
 import kr.daoko.persistence.AdminDAO;
 
 @Service
@@ -51,5 +54,29 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void goodsDelete(String gdsCode) throws Exception {
 			dao.goodsDelete(gdsCode);
+	}
+	
+	// 주문 목록
+	@Override
+	public List<OrderVO> orderList() throws Exception {
+		return 	dao.orderList();
+	}
+
+	// 특정 주문 목록
+	@Override
+	public List<OrderListVO> orderView(OrderVO order) throws Exception {
+		return dao.orderView(order);
+	}
+
+	// 모든 소감(댓글)
+	@Override
+	public List<ReplyListVO> allReply() throws Exception {
+		return dao.allReply();
+	}
+
+	// 소감(댓글) 삭제
+	@Override
+	public void deleteReply(int repNum) throws Exception {
+		dao.deleteReply(repNum);
 	}
 }

@@ -68,6 +68,7 @@
 		<aside>
 			<%@ include file="../include/aside.jsp" %>
 		</aside>
+		
 		<div id="container_box">
 			<h2>상품 목록</h2>
 			

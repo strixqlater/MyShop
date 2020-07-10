@@ -52,4 +52,32 @@
 		delete tbl_goods
 		where gdsCode = #{gdsCode}
 	</delete>
+	
+	<!-- 모든 유저의 주문 목록 -->
+	<select id="orderList" resultType="kr.daoko.domain.OrderVO">
+		select orderId, userId, orderRecv, userAddr1, userAddr2, userZipcode, orderTel, amount, orderDate
+		from tbl_order
+	</select>
+	
+	<!-- 특정 주문 목록 -->
+	<select id="orderView" resultType="kr.daoko.domain.OrderListVO">
+		select o.orderId, o.userId, o.orderRecv, o.userAddr1, o.userAddr2, o.userZipcode, o.orderTel, o.amount, o.orderDate, d.orderDetailsNum, d.gdsCode, d.cartStock, d.gdsName, g.gdsThumbImg, g.gdsPrice
+		from tbl_order o
+		inner join tbl_order_details d on o.orderId = d.orderId
+		inner join tbl_goods g on d.gdsCode = g.gdsCode
+		where o.orderId = #{orderId}
+	</select>
+	
+	<!-- 모든 소감(댓글) -->
+	<select id="allReply" resultType="kr.daoko.domain.ReplyListVO">
+		select r.gdsCode, r.userId, r.repNum, r.repCon, r.repDate, m.userName
+		from tbl_reply r
+		inner join tbl_member m on r.userId = m.userId
+	</select>
+	
+	<!-- 소감(댓글) 삭제 -->
+	<delete id="deleteReply">
+		delete tbl_reply
+		where repNum = #{repNum}
+	</delete>
 </mapper>
